@@ -44,7 +44,7 @@ group by 1;
 
 /* 4.Create a new column called loyalty to divide customers into three groups based on how long the customers have been with the company (rely on ‘2016-01-01’ and the first payment date of each customer).*/
 /* If the tenure is less than eight months and the customer still rents DVD, then the customer is new; if the term is greater than eight months and the customer still rents DVDs, the customer is loyal.*/
-/* . If the customer is no longer rents DVDs, then the customer is disloyal. Show the number of customers for each type of loyalty and tenure.*/
+/* If the customer is no longer rents DVDs, then the customer is disloyal. Show the number of customers for each type of loyalty and tenure.*/
 
 select loyalty, tenure, count(distinct customer_id) as nuber_of_customers
 from (select p.customer_id, active,
@@ -236,26 +236,26 @@ order by 2 desc;
 
 /*10.Are there movies that have no sales? Are there any characteristics related to these movies?*/
 
-SELECT f.title, f.rating, c.name as category, l.name as language, a.first_name || ' ' || a.last_name as actor
-FROM film f
-LEFT JOIN inventory i on f.film_id = i.film_id
-LEFT JOIN rental r on i.inventory_id = r.inventory_id
-LEFT JOIN payment p on r.rental_id = p.rental_id
-INNER JOIN film_category fc on f.film_id = fc.film_id
-INNER JOIN category c on fc.category_id = c.category_id
-INNER JOIN language l on f.language_id = l.language_id
-INNER JOIN film_actor fa on f.film_id = fa.film_id
-INNER JOIN actor a on a.actor_id = fa.actor_id
-GROUP BY 1
-HAVING sum(p.amount) IS NULL;
+select f.title, f.rating, c.name as category, l.name as language, a.first_name || ' ' || a.last_name as actor
+from film f
+left join inventory i on f.film_id = i.film_id
+left join rental r on i.inventory_id = r.inventory_id
+left join payment p on r.rental_id = p.rental_id
+inner join film_category fc on f.film_id = fc.film_id
+inner join category c on fc.category_id = c.category_id
+inner join language l on f.language_id = l.language_id
+inner join film_actor fa on f.film_id = fa.film_id
+inner join actor a on a.actor_id = fa.actor_id
+group by 1
+having sum(p.amount) is null;
 
 /* 11.Calculate the total sales for each store. The result should include store_id, store city and store country, manager name and total sales.*/
 
-SELECT s.store_id,
+select s.store_id,
     c.city||', '||cy.country AS store,
     sf.first_name||' '||sf.last_name AS manager,
     sum(p.amount) AS total_sales 
-FROM payment p, rental r, inventory i, store s, address a, city c, country cy, staff sf
+from payment p, rental r, inventory i, store s, address a, city c, country cy, staff sf
 where p.rental_id = r.rental_id and
     r.inventory_id = i.inventory_id and
     i.store_id = s.store_id and
@@ -263,7 +263,7 @@ where p.rental_id = r.rental_id and
     a.city_id = c.city_id and
     c.country_id = cy.country_id and
     s.manager_staff_id = sf.staff_id
-GROUP BY  1, 2, 3;
+group by  1, 2, 3;
 
 
                                                             
